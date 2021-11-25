@@ -2,7 +2,6 @@
 
 import phonenumbers as pn
 from django.db import migrations
-from phonenumber_field.modelfields import PhoneNumberField
 from phonenumbers import NumberParseException
 
 
@@ -26,6 +25,16 @@ def normalize_phonenumber(apps, schema_editor):
             flat.save()
 
 
+def move_backward(apps, schema_editor):
+    try:
+        Flat = apps.get_model('property', 'Flat')
+    except LookupError:
+        return None
+
+    for flat in Flat.objects.all():
+        flat.owners_pure_phone = None
+        flat.save()
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -33,5 +42,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(normalize_phonenumber)
+        migrations.RunPython(normalize_phonenumber, move_backward)
     ]
