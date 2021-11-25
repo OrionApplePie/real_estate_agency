@@ -10,6 +10,8 @@ class FlatAdmin(admin.ModelAdmin):
     list_editable = ('new_building',)
     list_display = (
         'address',
+        'owners_phonenumber',
+        'owners_pure_phone',
         'price',
         'new_building',
         'construction_year',
