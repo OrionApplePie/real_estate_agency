@@ -112,3 +112,6 @@ class Owner(models.Model):
         blank=True,
         db_index=True,
     )
+
+    def __str__(self):
+        return f'{self.owner} - {self.owners_phonenumber}'
