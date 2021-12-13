@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models.base import Model
 from django.utils import timezone
 
 from phonenumber_field.modelfields import PhoneNumberField
@@ -90,3 +91,24 @@ class Complaint(models.Model):
 
     def __str__(self):
         return f'{self.user} - {self.flat}'
+
+
+class Owner(models.Model):
+    """Модель собственника кваритиры."""
+
+    owner = models.CharField('ФИО владельца', max_length=200)
+    owners_phonenumber = models.CharField('Номер владельца', max_length=20)
+    owners_pure_phone = PhoneNumberField(
+        'Нормализированный номер владельца',
+        null=True,
+        blank=True,
+    )
+
+    flats = models.ManyToManyField(
+        to=Flat,
+        verbose_name='Кватриры в собственности',
+        related_name='owners',
+        null=True,
+        blank=True,
+        db_index=True,
+    )
